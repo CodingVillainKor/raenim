@@ -6,7 +6,7 @@ Manim utility packages for YouTube channel [Imcommit](https://www.youtube.com/@%
 
 1. Install raenim
 ```bash
-$ pip install https://github.com/CodingVillainKor/raenim.git
+$ pip install git+https://github.com/CodingVillainKor/raenim.git
 ```
 
 2. import raenim
