@@ -5,10 +5,11 @@ from .mobject import MOUSE, Mouse
 
 __all__ = ["Scene2D", "Scene3D"]
 
+
 class Scene2D(MovingCameraScene):
     def construct(self):
         pass
-    
+
     @wraps(MovingCameraScene.play)
     def playw(self, *args, wait=1, **kwargs):
         self.play(*args, **kwargs)
@@ -42,7 +43,7 @@ class Scene2D(MovingCameraScene):
         if getattr(self, "_mouse", None) is None:
             self._mouse = Mouse(self._get_mouse_array())
         return self._mouse
-    
+
     @staticmethod
     def _get_mouse_array():
         mouse = MOUSE.copy()
@@ -50,10 +51,11 @@ class Scene2D(MovingCameraScene):
         mouse[..., -1] = (mouse[..., 0] != 0) * 255
         return mouse
 
+
 class Scene3D(ThreeDScene):
     def construct(self):
         pass
-    
+
     @wraps(ThreeDScene.play)
     def playw(self, *args, wait=1, **kwargs):
         self.play(*args, **kwargs)
@@ -90,13 +92,33 @@ class Scene3D(ThreeDScene):
             zoom=zoom,
         )
 
-    def tilt_camera_vertical(self, zoom=1.0):
-        phi_tilt_degree = 60 * DEGREES
+    def tilt_camera_vertical(self, degree, zoom=1.0):
+        phi_tilt_degree = degree * DEGREES
 
         self.set_camera(
             phi=phi_tilt_degree,
             zoom=zoom,
         )
+
+    def move_camera_horizontally(self, degree, zoom=1.0, added_anims=[], wait=1.0):
+        phi_tilt_degree = degree * DEGREES
+        theta_tilt_degree = 90 * DEGREES
+        gamma_tilt_degree = -90 * DEGREES
+
+        self.move_camera(
+            phi=phi_tilt_degree,
+            theta=-90 * DEGREES - theta_tilt_degree,
+            gamma=gamma_tilt_degree,
+            zoom=zoom,
+            added_anims=added_anims,
+        )
+        self.wait(wait)
+
+    def move_camera_vertically(self, degree, zoom=1.0, added_anims=[], wait=1.0):
+        phi_tilt_degree = degree * DEGREES
+
+        self.move_camera(phi=phi_tilt_degree, zoom=zoom, added_anims=added_anims)
+        self.wait(wait)
 
     @wraps(ThreeDScene.set_camera_orientation)
     def set_camera(self, *args, **kwargs):
@@ -111,7 +133,7 @@ class Scene3D(ThreeDScene):
         if getattr(self, "_mouse", None) is None:
             self._mouse = Mouse(self._get_mouse_array())
         return self._mouse
-    
+
     @staticmethod
     def _get_mouse_array():
         mouse = MOUSE.copy()
