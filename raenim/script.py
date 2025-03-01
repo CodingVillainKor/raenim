@@ -6,10 +6,12 @@ class PythonCode(Code):
     def __init__(self, filename, **kwargs):
         kwargs["tab_width"] = kwargs.pop("tab_width", 4)
         kwargs["language"] = kwargs.pop("language", "python")
-        kwargs["line_spacing"] = kwargs.pop("line_spacing", 0.6)
-        kwargs["background"] = kwargs.pop("background", "window")
-        kwargs["font"] = kwargs.pop("font", "Consolas")
-        super().__init__(filename, **kwargs)
+        kwargs.pop("background", "window")
+        paragraph_config = {
+            "line_spacing": kwargs.pop("line_spacing", 0.6),
+            "font": kwargs.pop("font", "Noto Mono")
+        }
+        super().__init__(filename, paragraph_config=paragraph_config, **kwargs)
         self.frame.set_opacity(0.3)
 
     @property
@@ -18,6 +20,10 @@ class PythonCode(Code):
     
     @property
     def script(self):
+        return self[2]
+    
+    @property
+    def code(self):
         return self[2]
     
     def find_text(self, line_no:int, text:str, nth:int=1):
