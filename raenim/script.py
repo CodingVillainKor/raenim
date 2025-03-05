@@ -15,6 +15,7 @@ class PythonCode(Code):
         self.frame.set_opacity(0.3)
         with open(filename, "r") as f:
             self.code_string = f.read()
+        self.indentation_chars = kwargs.get("indentation_chars", "    ")
 
     @property
     def frame(self):
