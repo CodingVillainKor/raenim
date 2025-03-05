@@ -13,6 +13,8 @@ class PythonCode(Code):
         }
         super().__init__(filename, paragraph_config=paragraph_config, **kwargs)
         self.frame.set_opacity(0.3)
+        with open(filename, "r") as f:
+            self.code_string = f.read()
 
     @property
     def frame(self):
