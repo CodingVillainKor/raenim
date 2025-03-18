@@ -81,6 +81,20 @@ class Chainer(VGroup):
         for now_, next_ in zip(args[:-1], args[1:]):
             self.add(line_cls(now_, next_, **chain_kwargs))
 
+class Joiner(VGroup):
+    def __init__(self, *args, join: callable, **kwargs):
+        self.join = join
+        super().__init__(*args, **kwargs)
+    
+    def add(self, *args):
+        for arg in args:
+            if isinstance(arg, Mobject):
+                super().add(self.join())
+                super().add(arg)
+            else:
+                raise ValueError("Only Mobject can be added.")
+        return self
+    
 class BrokenLine(VGroup):
     def __init__(self, *pos, arrow=False, **kwargs):
         assert len(pos) > 2
