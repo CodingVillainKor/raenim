@@ -54,7 +54,7 @@ class FileSystem(VGroup):
         self._frame = RoundedRectangle(0.2, height=self.height, width=self.width, color=GREY_C).surround(self, buff=1.25)
         self.add(self._frame)
         if tag is not None:
-            self._tag = Text(tag, font="Consolas", font_size=24).next_to(self._frame, UP, buff=0.05).align_to(self._frame, LEFT)
+            self._tag = Text(tag, font="Noto Mono", font_size=24).next_to(self._frame, UP, buff=0.05).align_to(self._frame, LEFT)
             self.add(self._tag)
         else:
             self._tag = None
@@ -79,7 +79,7 @@ class FolderIcon(VGroup):
     def __init__(self, text:str):
         super().__init__()
         self._icon = Folder(size=0.5)
-        self._text = Text(text, font="Consolas", font_size=24)
+        self._text = Text(text, font="Noto Mono", font_size=24)
         self.add(self._icon, self._text)
         self.arrange(RIGHT, buff=0.15)
     
@@ -95,7 +95,7 @@ class FileIcon(VGroup):
     def __init__(self, text:str):
         super().__init__()
         self._icon = File(size=0.4)
-        self._text = Text(text, font="Consolas", font_size=24)
+        self._text = Text(text, font="Noto Mono", font_size=24)
         self.add(self._icon, self._text)
         self.arrange(RIGHT, buff=0.25)
     

@@ -89,7 +89,8 @@ class Joiner(VGroup):
     def add(self, *args):
         for arg in args:
             if isinstance(arg, Mobject):
-                super().add(self.join())
+                if len(self):
+                    super().add(self.join())
                 super().add(arg)
             else:
                 raise ValueError("Only Mobject can be added.")

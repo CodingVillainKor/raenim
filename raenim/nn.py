@@ -76,7 +76,7 @@ class Tensor(VGroup):
         if numbers is None:
             numbers = np.random.randn(len(self))
         assert len(numbers) == len(self)
-        nums = VGroup(*[Text(f"{n:.1f}" if n < 0 else f"+{n:.1f}", font_size=font_size, font="Consolas").move_to(self[i]) for i, n in enumerate(numbers)])
+        nums = VGroup(*[Text(f"{n:.1f}" if n < 0 else f"+{n:.1f}", font_size=font_size, font="Noto Mono").move_to(self[i]) for i, n in enumerate(numbers)])
         return Transform(self, nums)
 
 def propagation(mlp, indices, scene_instance=None, run_time=0.3):
