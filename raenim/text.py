@@ -9,9 +9,12 @@ class CodeText(Text):
         super().__init__(text, **kwargs)
 
 class ListText(VGroup):
-    def __init__(self, *texts, font_size=48, color=WHITE, arrange=RIGHT, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, *texts, font_size=48, color=WHITE, arrange=RIGHT, no_bracket=False, **kwargs):
+        super().__init__()
         t = VGroup(*[text if isinstance(text, Mobject) else Text(str(text), font_size=font_size, color=color, **kwargs) for text in texts]).arrange(arrange)
+        if no_bracket:
+            self.add(*t)
+            return
         bracket0 = Text("[", font_size=font_size, color=color, **kwargs).next_to(t[0], LEFT)
         bracket1 = Text("]", font_size=font_size, color=color, **kwargs).next_to(t[-1], RIGHT)
         self.add(bracket0, *t, bracket1)
