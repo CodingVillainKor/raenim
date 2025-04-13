@@ -2,6 +2,6 @@ from setuptools import setup
 
 setup(
     name="raenim",
-    version="0.3.4",
+    version="0.4.1",
     packages=["raenim"],
 )
