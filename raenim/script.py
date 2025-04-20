@@ -57,10 +57,11 @@ class PythonCode(Code):
         return anim(target), anim_out(target)
 
     def __call__(self, *line) -> VMobject:
+        is_negative = lambda x: x < 0
         if len(line) == 1:
-            return self.code[line[0]-1]
+            return self.code[line[0]-1*is_negative(line[0])]
         elif len(line) == 2:
-            return self.code[line[0]-1:line[1]]
+            return self.code[line[0]-1*is_negative(line[0]):line[1]]
         else:
             raise ValueError(f"The number of argument line should be 1 or 2, but {len(line)} given")
 
