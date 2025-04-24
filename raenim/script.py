@@ -19,15 +19,15 @@ class PythonCode(Code):
 
     @property
     def frame(self):
-        return self[:2]
+        return self[:-1]
     
     @property
     def script(self):
-        return self[2]
+        return self.code_lines
     
     @property
     def code(self):
-        return self[2]
+        return self.code_lines
     
     def find_text(self, line_no:int, text:str, nth:int=1):
         lines = self.code_string.split("\n")
