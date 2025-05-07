@@ -47,7 +47,7 @@ MOUSE = [
 
 class Mouse(ImageMobject):
     def __init__(self, *args, **kwargs):
-        super().__init__(MOUSE, *args, **kwargs)
+        super().__init__(*args, **kwargs)
     
     def on(self, target):
         self.move_to(target)
