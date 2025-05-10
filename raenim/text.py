@@ -1,11 +1,12 @@
 from manim import *
+from .utils import MONO_FONT
 
 __all__ = ["CodeText", "ListText", "TextBox", "TexBox"]
 
 class CodeText(Text):
     def __init__(self, text, **kwargs):
         kwargs["font_size"] = kwargs.pop("font_size", 24)
-        kwargs["font"] = kwargs.pop("font", "Noto Mono")
+        kwargs["font"] = kwargs.pop("font", MONO_FONT)
         super().__init__(text, **kwargs)
 
 class ListText(VGroup):

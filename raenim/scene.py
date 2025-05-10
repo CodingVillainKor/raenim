@@ -13,12 +13,14 @@ class Scene2D(MovingCameraScene):
     @wraps(MovingCameraScene.play)
     def playw(self, *args, wait=1, **kwargs):
         self.play(*args, **kwargs)
-        self.wait(wait)
+        if wait > 0:
+            self.wait(wait)
 
     @wraps(MovingCameraScene.wait)
     def addw(self, *args, wait=1, **kwargs):
         self.add(*args, **kwargs)
-        self.wait(wait)
+        if wait > 0:
+            self.wait(wait)
 
     def clear(self):
         for m in self.mobjects:
@@ -59,12 +61,14 @@ class Scene3D(ThreeDScene):
     @wraps(ThreeDScene.play)
     def playw(self, *args, wait=1, **kwargs):
         self.play(*args, **kwargs)
-        self.wait(wait)
+        if wait > 0:
+            self.wait(wait)
 
     @wraps(ThreeDScene.wait)
     def addw(self, *args, wait=1, **kwargs):
         self.add(*args, **kwargs)
-        self.wait(wait)
+        if wait > 0:
+            self.wait(wait)
 
     def clear(self):
         for m in self.mobjects:

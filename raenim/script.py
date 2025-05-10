@@ -1,4 +1,5 @@
 from manim import *
+from .utils import MONO_FONT
 
 __all__ = ["PythonCode"]
 
@@ -9,7 +10,7 @@ class PythonCode(Code):
         kwargs.pop("background", "window")
         paragraph_config = {
             "line_spacing": kwargs.pop("line_spacing", 0.6),
-            "font": kwargs.pop("font", "Noto Mono")
+            "font": kwargs.pop("font", MONO_FONT)
         }
         super().__init__(filename, paragraph_config=paragraph_config, **kwargs)
         self.frame.set_opacity(0.3)
