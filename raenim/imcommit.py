@@ -7,55 +7,42 @@ class Logo(VGroup):
         super().__init__(**kwargs)
         rdiff_line_ratio = 120
         line_length_ratio = 1
-        outer_circle = Circle(
-            radius=size, color=WHITE, fill_opacity=1, stroke_width=0
+        self.outer_circle = Circle(
+            radius=size, color=GREY_B, fill_opacity=1, stroke_width=0
         ).set_z_index(0)
-        inner_circle = Circle(
+        self.inner_circle = Circle(
             radius=size - stroke_width, color=fill_color, fill_opacity=1, stroke_width=0
         ).set_z_index(0.1)
-        line1 = Line(
-            outer_circle.get_bottom() + DOWN * size * line_length_ratio,
-            outer_circle.get_bottom(),
-            color=WHITE,
+        self.line_fn = lambda angle, length: Line(
+            self.outer_circle.point_at_angle(angle),
+            self.outer_circle.point_at_angle(angle)
+            + normalize(
+                self.outer_circle.point_at_angle(angle) - self.outer_circle.get_center()
+            )
+            * length,
+            color=GREY_B,
             stroke_width=stroke_width * rdiff_line_ratio,
         )
-        line2 = Line(
-            outer_circle.get_top(),
-            outer_circle.get_top() + UP * size * line_length_ratio,
-            color=WHITE,
-            stroke_width=stroke_width * rdiff_line_ratio,
-        )
+        self.line1 = self.line_fn(-PI / 2, length=size * line_length_ratio)
+        self.line2 = self.line_fn(PI / 2, length=size * line_length_ratio)
 
-        self.add(inner_circle, outer_circle, line1, line2)
+        self.add(self.inner_circle, self.outer_circle, self.line1, self.line2)
 
     def line_to(self, target, *, which=1):
-        angle0 = angle_of_vector(
-            self[which + 1].get_end() - self[which + 1].get_start()
-        )
-        
+        line: Line = getattr(self, f"line{which}")
+        angle0 = angle_of_vector(line.get_end() - line.get_start())
+        length0 = line.get_length()
+
+        angle_value = ValueTracker(angle0)
+        update_fn = lambda x: x.become(self.line_fn(angle_value.get_value(), length0))
+        line.add_updater(update_fn)
 
         if isinstance(target, Mobject):
             target = target.get_center()
         angle = angle_of_vector(target - self[0].get_center())
-        circle_pos = self[1].point_at_angle(angle)
-        dest = circle_pos + normalize(circle_pos - self[1].get_center())
-        self[which + 1].generate_target()
-        self[which + 1].target.put_start_and_end_on(circle_pos, dest)
-
-        return MoveToTarget(self[which + 1])
-
-
-class Test(Scene):
-    def construct(self):
-        logo = Logo()
-        rect = Rectangle(
-            width=0.5,
-            height=0.5,
-            color=WHITE,
-            fill_opacity=1,
-            stroke_width=0,
-        ).shift(UP * 3 + RIGHT * 2)
-        self.add(logo, rect)
-        self.wait()
-        self.play(logo.line_to(rect, which=1))
-        self.wait(2)
+        angle_value.generate_target().set_value(angle)
+        return Succession(
+            MoveToTarget(angle_value),
+            UpdateFromFunc(line, lambda x: x.remove_updater(update_fn), run_time=0.01),
+            UpdateFromFunc(line, lambda x: x.become(self.line_fn(angle_value.target.get_value(), length0)), run_time=0.01),
+        )
