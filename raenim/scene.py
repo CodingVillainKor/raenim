@@ -34,6 +34,12 @@ class Scene2D(MovingCameraScene):
     def play_camera(self, to=ORIGIN, scale=1, **play_kwargs):
         self.playw(self.camera.frame.animate.move_to(to).scale(scale), **play_kwargs)
 
+    def point_mouse_to(self, point: Mobject | np.ndarray, *, from_: Mobject | np.ndarray = None, **kwargs):
+        if from_ is None:
+            from_ = self.mouse
+        if from_ == RIGHT:
+            from_ = self.cf.get_right() + from_
+
     @property
     def cf(self) -> VMobject:
         return self.camera.frame
