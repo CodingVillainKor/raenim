@@ -1,5 +1,6 @@
 from manim import *
 from .utils import MONO_FONT
+from manim import __version__ as MANIM_VERSION
 
 __all__ = ["PythonCode"]
 
@@ -37,9 +38,10 @@ class PythonCode(Code):
             idx = _find_multiple(line, text)[nth-1]
         except IndexError:
             raise IndexError(f"Cannot find {nth}th {text} at line {line_no}: {line}")
-        
-        indentation_level = _count_indentation(line)
-        idx -= (len(self.indentation_chars)-1) * indentation_level
+        ver1, ver2, *_ = MANIM_VERSION.split(".")
+        if int(ver1) < 1 and int(ver2) < 19:
+            indentation_level = _count_indentation(line)
+            idx -= (len(self.indentation_chars)-1) * indentation_level
         return idx, idx+len(text)
     
     def text_slice(self, line_no:int, text:str, nth:int=1, exclusive=False) -> Mobject:
