@@ -6,3 +6,4 @@ from .scene import *
 from .script import *
 from .text import *
 from .animation import *
+from .utils import MONO_FONT

@@ -8,9 +8,10 @@ class PythonCode(Code):
     def __init__(self, filename, **kwargs):
         kwargs["tab_width"] = kwargs.pop("tab_width", 4)
         kwargs["language"] = kwargs.pop("language", "python")
+        kwargs["add_line_numbers"] = kwargs.pop("add_line_numbers", False)
         kwargs.pop("background", "window")
         paragraph_config = {
-            "line_spacing": kwargs.pop("line_spacing", 0.6),
+            "line_spacing": kwargs.pop("line_spacing", 1.0),
             "font": kwargs.pop("font", MONO_FONT)
         }
         super().__init__(filename, paragraph_config=paragraph_config, **kwargs)
