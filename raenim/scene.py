@@ -32,6 +32,9 @@ class Scene2D(MovingCameraScene):
 
     def playw_return(self, *args, **kwargs):
         self.playw(*args, rate_func=rate_functions.there_and_back, **kwargs)
+    
+    def playwl(self, *args, lag_ratio=0.05, wait=1, **kwargs):
+        self.playw(LaggedStart(*args, lag_ratio=lag_ratio), wait=wait, **kwargs)
 
     def play_camera(self, to=ORIGIN, scale=1, **play_kwargs):
         self.playw(self.camera.frame.animate.move_to(to).scale(scale), **play_kwargs)
@@ -86,6 +89,9 @@ class Scene3D(ThreeDScene):
 
     def playw_return(self, *args, **kwargs):
         self.playw(*args, rate_func=rate_functions.there_and_back, **kwargs)
+
+    def playwl(self, *args, lag_ratio=0.05, wait=1, **kwargs):
+        self.playw(LaggedStart(*args, lag_ratio=lag_ratio), wait=wait, **kwargs)
 
     def play_camera(self, to=ORIGIN, scale=1, **play_kwargs):
         self.playw(self.camera.frame.animate.move_to(to).scale(scale), **play_kwargs)
