@@ -71,3 +71,32 @@ class TexBox(VGroup):
         self.tex.set_z_index(z_index+0.1)
         self.box.set_z_index(z_index)
         return self
+
+class Words(Text):
+    def __init__(self, text:str, **kwargs):
+        super().__init__(text, **kwargs)
+        words_idx = self._build_spans(text)
+        self.words = VGroup(*[self[i:j] for i, j in words_idx])
+
+    @staticmethod
+    def _build_spans(s: str) -> list[tuple[int, int]]:
+        spans: list[tuple[int, int]] = []
+        in_word = False
+        nonws_idx = 0
+        start_nonws = 0
+
+        for ch in s:
+            if ch.isspace():
+                if in_word:
+                    spans.append((start_nonws, nonws_idx))
+                    in_word = False
+            else:
+                if not in_word:
+                    start_nonws = nonws_idx
+                    in_word = True
+                nonws_idx += 1
+
+        if in_word:
+            spans.append((start_nonws, nonws_idx))
+
+        return spans
