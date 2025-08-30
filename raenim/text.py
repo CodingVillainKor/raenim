@@ -1,7 +1,7 @@
 from manim import *
 from .utils import MONO_FONT
 
-__all__ = ["CodeText", "ListText", "TextBox", "TexBox"]
+__all__ = ["CodeText", "ListText", "TextBox", "TexBox", "Words"]
 
 class CodeText(Text):
     def __init__(self, text, **kwargs):
