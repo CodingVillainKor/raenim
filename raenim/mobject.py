@@ -1,4 +1,7 @@
 from manim import *
+from typing import Union
+from cv2 import imread, resize
+from pathlib import Path
 
 MOUSE = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -111,3 +114,51 @@ class BrokenLine(VGroup):
             else:
                 L = Arrow if arrow else Line
                 self.add(L(s, e, buff=0, **line_kwargs))
+
+class Pixel(Square):
+    def __init__(self, side_length, **kwargs):
+        kwargs["stroke_width"] = kwargs.get("stroke_width", 0)
+        kwargs["stroke_color"] = kwargs.get("stroke_color", GREY_D)
+        kwargs["fill_opacity"] = kwargs.get("fill_opacity", 1)
+        kwargs["fill_color"] = kwargs.get("fill_color", BLACK)
+        super().__init__(side_length, **kwargs)
+
+class PixelImage(VGroup):
+    def __init__(
+            self,
+            input_: Union[str, np.ndarray], 
+            pixel_size: Union[float, int, None] = None,
+            *,
+            pixel_kwargs={},
+            img_kwargs=dict(buff=0.0)
+        ):
+        super().__init__()
+        if isinstance(input_, str):
+            input_ = Path(input_)
+            if str(input_).startswith("~"):
+                input_ = input_.expanduser()
+            input_array = imread(input_)
+        elif isinstance(input_, np.ndarray):
+            input_array = input_
+        else:
+            raise ValueError("input_ should be a path or an array.")
+
+        h, w = input_array.shape[:2]
+
+        if max(h, w) > 480:
+            print(
+                "Warning: The input image is too large."
+                "It will be resized to fit in 480 pixels."
+            )
+            scale = 480 / max(h, w)
+            input_array = resize(input_array, (int(w * scale), int(h * scale)))
+
+        if pixel_size is None:
+            pixel_size = 3 / max(h, w)
+
+        for i in range(input_array.shape[0]):
+            for j in range(input_array.shape[1]):
+                color_np = input_array[i, j]
+                color = ManimColor(color_np)
+                self.add(Pixel(pixel_size, fill_color=color, **pixel_kwargs))
+        self.arrange_in_grid(h, w, **img_kwargs)
