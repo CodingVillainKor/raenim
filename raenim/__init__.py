@@ -7,3 +7,4 @@ from .script import *
 from .text import *
 from .animation import *
 from .utils import MONO_FONT
+from .matrix import Mat

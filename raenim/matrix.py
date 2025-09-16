@@ -35,3 +35,20 @@ class randn(DecimalMatrix):
     @property
     def val(self):
         return self._val
+
+class Mat:
+    @staticmethod
+    def zeros(*shape, **kwargs):
+        return zeros(*shape, **kwargs)
+
+    @staticmethod
+    def ones(*shape, **kwargs):
+        return ones(*shape, **kwargs)
+
+    @staticmethod
+    def eye(n, **kwargs):
+        return eye(n, **kwargs)
+
+    @staticmethod
+    def randn(*shape, **kwargs):
+        return randn(*shape, **kwargs)
