@@ -99,21 +99,21 @@ class Joiner(VGroup):
                 raise ValueError("Only Mobject can be added.")
         return self
     
-class BrokenLine(VGroup):
-    def __init__(self, *pos, arrow=False, **kwargs):
-        assert len(pos) > 2
+class BrokenLine(TipableVMobject):
+    def __init__(self, *pos, arrow=False, smooth=False, **kwargs):
+        assert not (arrow and smooth), \
+            "A broken line cannot be both arrowed and smooth."
+        assert len(pos) > 2, \
+            "A broken line must have at least three points."
         super().__init__()
-        starts = pos[:-1]
-        ends = pos[1:]
-        for i, (s, e) in enumerate(zip(starts, ends)):
-            line_kwargs = kwargs.copy()
-            if i != len(starts)-1:
-                if arrow and "max_tip_length_to_length_ratio" in kwargs:
-                    line_kwargs.pop("max_tip_length_to_length_ratio")
-                self.add(Line(s, e, **line_kwargs))
-            else:
-                L = Arrow if arrow else Line
-                self.add(L(s, e, buff=0, **line_kwargs))
+        if smooth:
+            self.set_points_smoothly(pos)
+        else:
+            self.set_points_as_corners(pos)
+
+        if arrow:
+            self.add_tip(**kwargs)
+
 
 class Pixel(Square):
     def __init__(self, side_length, **kwargs):
