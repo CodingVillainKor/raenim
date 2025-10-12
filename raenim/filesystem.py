@@ -3,7 +3,7 @@ from .utils import MONO_FONT
 
 __all__ = ["File", "Folder", "FileSystem", "FolderIcon", "FileIcon"]
 
-class File(VGroup):
+class FileIcon(VGroup):
     def __init__(self, size=2):
         super().__init__()
         nump = NumberPlane()
@@ -49,7 +49,7 @@ class FileSystem(VGroup):
         files_list = sorted(files)
 
         self._folders = VGroup(*[FolderIcon(f) for f in folders_list]).arrange(DOWN, buff=buff, aligned_edge=LEFT)
-        self._files = VGroup(*[FileIcon(f) for f in files_list]).arrange(DOWN, buff=buff, aligned_edge=LEFT)
+        self._files = VGroup(*[File(f) for f in files_list]).arrange(DOWN, buff=buff, aligned_edge=LEFT)
         self.add(self._folders, self._files)
         self.arrange(DOWN, buff=buff, aligned_edge=LEFT)
         self._frame = RoundedRectangle(0.2, height=self.height, width=self.width, color=GREY_C).surround(self, buff=1.25)
@@ -92,10 +92,10 @@ class FolderIcon(VGroup):
     def text(self):
         return self._text
 
-class FileIcon(VGroup):
+class File(VGroup):
     def __init__(self, text:str):
         super().__init__()
-        self._icon = File(size=0.4)
+        self._icon = FileIcon(size=0.4)
         self._text = Text(text, font=MONO_FONT, font_size=24)
         self.add(self._icon, self._text)
         self.arrange(RIGHT, buff=0.25)
