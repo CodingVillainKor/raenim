@@ -92,13 +92,17 @@ class Joiner(VGroup):
     def add(self, *args):
         for arg in args:
             if isinstance(arg, Mobject):
-                if len(self):
+                if len(self.items) > 0:
                     super().add(self.join())
                 super().add(arg)
             else:
                 raise ValueError("Only Mobject can be added.")
         return self
     
+    @property
+    def items(self):
+        return [item for item in self]
+
 class BrokenLine(TipableVMobject):
     def __init__(self, *pos, arrow=False, smooth=False, **kwargs):
         assert not (arrow and smooth), \
