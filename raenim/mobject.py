@@ -166,3 +166,6 @@ class PixelImage(VGroup):
                 color = ManimColor(color_np)
                 self.add(Pixel(pixel_size, fill_color=color, **pixel_kwargs))
         self.arrange_in_grid(h, w, **img_kwargs)
+
+cat_path = Path(__file__).parents[1] / "vecatable.jpg"
+CAT = ImageMobject(cat_path)
