@@ -163,6 +163,14 @@ class PixelImage(VGroup):
         for i in range(input_array.shape[0]):
             for j in range(input_array.shape[1]):
                 color_np = input_array[i, j]
+                if np.issubdtype(color_np.dtype, np.integer):
+                    if color_np.ndim == 0:
+                        color_np = (int(color_np),) * 3
+                    color_np = tuple(int(x) for x in color_np)
+                elif np.issubdtype(color_np.dtype, np.floating):
+                    if color_np.ndim == 0:
+                        color_np = (float(color_np[0]),) * 3
+                    color_np = tuple(float(x) for x in color_np)
                 color = ManimColor(color_np)
                 self.add(Pixel(pixel_size, fill_color=color, **pixel_kwargs))
         self.arrange_in_grid(h, w, **img_kwargs)
