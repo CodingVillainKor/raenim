@@ -5,6 +5,6 @@ setup(
     version="0.5.1",
     packages=["raenim"],
     install_requires=[
-        "omegaconf",
+        "addict",
     ],
 )

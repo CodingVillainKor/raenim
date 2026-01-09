@@ -1,6 +1,6 @@
 from manim import *
 from functools import wraps
-from omegaconf import DictConfig
+from addict import Dict
 
 from .mobject import MOUSE, Mouse
 
@@ -37,9 +37,9 @@ class RaenimScene:
     def play_camera(self, to=ORIGIN, scale=1, **play_kwargs):
         self.playw(self.camera.frame.animate.move_to(to).scale(scale), **play_kwargs)
 
-    def organize(self, local_vars: dict) -> DictConfig:
+    def organize(self, local_vars: dict) -> Dict:
         mobjects = {k: v for k, v in local_vars.items() if isinstance(v, Mobject)}
-        return DictConfig(mobjects)
+        return Dict(mobjects)
 
     @property
     def mouse(self):
