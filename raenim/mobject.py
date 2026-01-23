@@ -174,3 +174,41 @@ class PixelImage(VGroup):
                 color = ManimColor(color_np)
                 self.add(Pixel(pixel_size, fill_color=color, **pixel_kwargs))
         self.arrange_in_grid(h, w, **img_kwargs)
+
+class Overlay(Rectangle):
+    def __init__(self, *args, **kwargs):
+        kwargs["stroke_width"] = kwargs.get("stroke_width", 0)
+        kwargs["color"] = kwargs.get("color", BLACK)
+        kwargs["fill_opacity"] = kwargs.get("fill_opacity", 0.7)
+        super().__init__(*args, **kwargs)
+
+    def surround_mobjects(self, mobjects, buff=0.5):
+        t, b, l, r = (
+            max([obj.get_top()[1] for obj in mobjects]),
+            min([obj.get_bottom()[1] for obj in mobjects]),
+            min([obj.get_left()[0] for obj in mobjects]),
+            max([obj.get_right()[0] for obj in mobjects]),
+        )
+        self.move_to(np.array([(l + r) / 2, (t + b) / 2, 0]))
+        self.stretch_to_fit_height(t - b + 2 * buff)
+        self.stretch_to_fit_width(r - l + 2 * buff)
+
+        return self
+
+    def to_front(self, mobjects):
+        max_z_index = max([m.get_z_index() for m in mobjects], default=0)
+        self.set_z_index(max_z_index + 1)
+        return self
+
+    def update_coverage(self, mobjects, buff=0.5):
+        t, b, l, r = (
+            max([obj.get_top()[1] for obj in mobjects]),
+            min([obj.get_bottom()[1] for obj in mobjects]),
+            min([obj.get_left()[0] for obj in mobjects]),
+            max([obj.get_right()[0] for obj in mobjects]),
+        )
+        self.move_to(np.array([(l + r) / 2, (t + b) / 2, 0]))
+        self.stretch_to_fit_height(t - b + 2 * buff)
+        self.stretch_to_fit_width(r - l + 2 * buff)
+        self.to_front(mobjects)
+        return self
