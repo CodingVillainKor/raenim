@@ -6,5 +6,8 @@ setup(
     packages=["raenim"],
     install_requires=[
         "addict",
+        "opencv-python",
+        "manim",
+        "noise"
     ],
 )
