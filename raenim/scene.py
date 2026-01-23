@@ -2,7 +2,7 @@ from manim import *
 from functools import wraps
 from addict import Dict
 
-from .mobject import MOUSE, Mouse
+from .mobject import MOUSE, Mouse, Overlay
 
 __all__ = ["Scene2D", "Scene3D"]
 
@@ -41,11 +41,38 @@ class RaenimScene:
         mobjects = {k: v for k, v in local_vars.items() if isinstance(v, Mobject)}
         return Dict(mobjects)
 
+    def all_but(self, *mobjects):
+        flattened = []
+        for mob in self.mobjects_:
+            if type(mob) is VGroup:
+                flattened.extend(mob)
+            else:
+                flattened.append(mob)
+        return [mob for mob in flattened if mob not in mobjects]
+
     @property
     def mouse(self):
         if getattr(self, "_mouse", None) is None:
             self._mouse = Mouse(self._get_mouse_array())
         return self._mouse
+
+    @property
+    def overlay(self):
+        buff = 0.5
+        if getattr(self, "_overlay", None) is None:
+            self._overlay = Overlay().surround_mobjects(self.mobjects_wo_overlay, buff=buff)
+            self._overlay.to_front([obj for obj in self.mobjects_wo_overlay])
+        return self._overlay
+
+    @property
+    def mobjects_wo_overlay(self):
+        mobs = self.mobjects_
+        overlay = getattr(self, "_overlay", None)
+        return [mob for mob in mobs if mob is not overlay]
+    
+    @property
+    def mobjects_(self):
+        return [obj for obj in self.mobjects if type(obj) is not Mobject]
 
     @staticmethod
     def _get_mouse_array():
@@ -59,7 +86,13 @@ class Scene2D(MovingCameraScene, RaenimScene):
     def construct(self):
         pass
 
-    def point_mouse_to(self, point: Mobject | np.ndarray, *, from_: Mobject | np.ndarray = None, **kwargs):
+    def point_mouse_to(
+        self,
+        point: Mobject | np.ndarray,
+        *,
+        from_: Mobject | np.ndarray = None,
+        **kwargs,
+    ):
         if from_ is None:
             from_ = self.mouse
         if from_ == RIGHT:
