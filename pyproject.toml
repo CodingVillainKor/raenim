@@ -1,7 +1,7 @@
 [project]
 name = "raenim"
-version = "0.5.2"
-description = "Add your description here"
+version = "0.5.3"
+description = "Imcommit's custom manim library"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
