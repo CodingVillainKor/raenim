@@ -112,7 +112,7 @@ class RaeTex(MathTex):
         super().__init__(*self.splitted, **kwargs)
 
     def __getitem__(self, index: int | str) -> MathTex:
-        if isinstance(index, int):
+        if isinstance(index, (int, slice)):
             return super().__getitem__(index)
         else:
             result = self.dict.get(index)
