@@ -244,3 +244,16 @@ class AMove(Transform):
             **kwargs
         )
 
+class Transformr(Transform):
+    def __init__(
+        self,
+        mobject: Mobject,
+        target_mobject: Mobject,
+        **kwargs,
+    ):
+        super().__init__(
+            mobject,
+            target_mobject,
+            replace_mobject_with_target_in_scene=True,
+            **kwargs
+    )
