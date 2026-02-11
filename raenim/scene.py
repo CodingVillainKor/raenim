@@ -1,6 +1,7 @@
 from manim import *
 from functools import wraps
 from addict import Dict
+from types import GeneratorType
 
 from .mobject import MOUSE, Mouse, Overlay
 
@@ -11,6 +12,8 @@ class RaenimScene:
     """Base class for common functionality shared between Scene2D and Scene3D"""
 
     def playw(self, *args, wait=1, **kwargs):
+        if len(args) == 1 and isinstance(args[0], GeneratorType):
+            args = list(args[0])
         self.play(*args, **kwargs)
         if wait > 0:
             self.wait(wait)
@@ -32,7 +35,14 @@ class RaenimScene:
         self.playw(*args, rate_func=rate_functions.there_and_back, **kwargs)
 
     def playwl(self, *args, lag_ratio=0.05, wait=1, **kwargs):
+        if len(args) == 1 and isinstance(args[0], GeneratorType):
+            args = list(args[0])
         self.playw(LaggedStart(*args, lag_ratio=lag_ratio), wait=wait, **kwargs)
+
+    def playwlfin(self, *mobjects, **kwargs):
+        if len(mobjects) == 1 and isinstance(mobjects[0], GeneratorType):
+            mobjects = list(mobjects[0])
+        self.playwl(*[FadeIn(mobj) for mobj in mobjects], **kwargs)
 
     def play_camera(self, to=ORIGIN, scale=1, **play_kwargs):
         self.playw(self.camera.frame.animate.move_to(to).scale(scale), **play_kwargs)
