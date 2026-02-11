@@ -102,34 +102,16 @@ class Words(Text):
         return spans
     
 class RaeTex(MathTex):
-    def __init__(self, tex_string: str, *, split_char="`", **kwargs):
-        self.splitted = tex_string.split(split_char)
-        for i in reversed(range(len(self.splitted))):
-            if self.splitted[i] == "":
-                self.splitted.pop(i)
-            else:
-                break
-        super().__init__(*self.splitted, **kwargs)
+    def __init__(self, *tex_strings: list[str], items=None, **kwargs):
+        super().__init__(*tex_strings, substrings_to_isolate=items, **kwargs)
 
     def __getitem__(self, index: int | str) -> MathTex:
         if isinstance(index, (int, slice)):
             return super().__getitem__(index)
         else:
-            result = self.dict.get(index)
-            if result is None:
-                raise KeyError(f"No such item: {index}")
+            result = self.get_parts_by_tex(index)
             return result
 
     @property
     def strings(self) -> list[str]:
-        return [self.splitted[i] for i in range(len(self.splitted))]
-    
-    @property
-    def dict(self) -> dict[str, MathTex | VGroup]:
-        result = {}
-        for i, item in enumerate(self.splitted):
-            if item not in result:
-                result[item] = self[i]
-            else:
-                result[item] = VGroup([*result[item], self[i]])
-        return result
+        return self.tex_strings
