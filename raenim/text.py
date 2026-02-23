@@ -81,23 +81,18 @@ class Words(Text):
     @staticmethod
     def _build_spans(s: str) -> list[tuple[int, int]]:
         spans: list[tuple[int, int]] = []
-        in_word = False
-        nonws_idx = 0
-        start_nonws = 0
+        i, n = 0, len(s)
 
-        for ch in s:
-            if ch.isspace():
-                if in_word:
-                    spans.append((start_nonws, nonws_idx))
-                    in_word = False
-            else:
-                if not in_word:
-                    start_nonws = nonws_idx
-                    in_word = True
-                nonws_idx += 1
-
-        if in_word:
-            spans.append((start_nonws, nonws_idx))
+        while i < n:
+            if s[i].isspace():
+                i += 1
+                continue
+            start = i
+            while i < n and not s[i].isspace():
+                i += 1
+            while i < n and s[i].isspace():
+                i += 1
+            spans.append((start, i))
 
         return spans
     

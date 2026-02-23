@@ -110,13 +110,21 @@ class RWiggle(Animation):
     def __init__(
         self,
         mobject: Mobject,
-        amp=(0.15, 0.15, 0.15),
-        speed=1.5,
+        amp: tuple | float | None = None,
+        speed: float | None = None,
         phase=None,
         pow=8,
         run_time=2.0,
         **kwargs,
     ):
+        if amp is None:
+            amp = (0.1, 0.1, 0.1)
+        elif isinstance(amp, (int, float)):
+            amp = (amp, amp, amp)
+        
+        if speed is None:
+            speed = amp[0] * 40
+
         self.amp = amp
         self.freq = speed
         self.phase = (

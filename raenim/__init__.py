@@ -9,3 +9,4 @@ from .animation import *
 from .utils import MONO_FONT
 from .matrix import *
 from .git import *
+from .coordinates import *
