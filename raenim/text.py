@@ -90,8 +90,6 @@ class Words(Text):
             start = i
             while i < n and not s[i].isspace():
                 i += 1
-            while i < n and s[i].isspace():
-                i += 1
             spans.append((start, i))
 
         return spans
