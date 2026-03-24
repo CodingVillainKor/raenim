@@ -265,3 +265,24 @@ class Transformr(Transform):
             replace_mobject_with_target_in_scene=True,
             **kwargs
     )
+
+class Marking(Circumscribe):
+    def __init__(
+        self,
+        mobject: Mobject,
+        buff: float = SMALL_BUFF,
+        color: ParsableManimColor = PURE_YELLOW,
+        run_time: float = 1,
+        stroke_width: float = DEFAULT_STROKE_WIDTH,
+        **kwargs,
+    ):
+        super().__init__(
+            mobject,
+            fade_in=True,
+            fade_out=True,
+            buff=buff,
+            color=color,
+            run_time=run_time,
+            stroke_width=stroke_width,
+            **kwargs
+        )
