@@ -1,5 +1,6 @@
 from manim import *
 from .utils import MONO_FONT
+from collections import defaultdict
 
 __all__ = ["CodeText", "ListText", "TextBox", "TexBox", "Words", "RaeTex"]
 
@@ -97,13 +98,16 @@ class Words(Text):
 class RaeTex(MathTex):
     def __init__(self, *tex_strings: list[str], items=None, **kwargs):
         super().__init__(*tex_strings, substrings_to_isolate=items, **kwargs)
+        parts = defaultdict(VGroup)
+        for i, tex_string in enumerate(tex_strings):
+            parts[tex_string].add(self[i])
+        self.parts = VDict(parts)
 
     def __getitem__(self, index: int | str) -> MathTex:
         if isinstance(index, (int, slice)):
             return super().__getitem__(index)
         else:
-            result = self.get_parts_by_tex(index)
-            return result
+            return self.parts[index]
 
     @property
     def strings(self) -> list[str]:
